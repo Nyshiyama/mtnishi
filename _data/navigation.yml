@@ -9,9 +9,6 @@ main:
   - title: "TAGS"
     url: /tags/
     description: "タグごとにソートされた記事一覧"
-  - title: "PROFILE"
-    url: "/profile/"
-    description: "プロフィール"
   - title: "PORTFOLIO"
     url: "/portfolio/"
     description: "ポートフォリオ"
