@@ -41,8 +41,11 @@ permalink: /policy/
 
 ただし、インラインフレームの使用や画像の直リンクはご遠慮ください。
 
+{% comment %}
+
 ## サイトポリシー作成にあたっての参考資料
 
 [【ブログに必須！】プライバシーポリシーと免責事項の書き方](https://www.xserver.ne.jp/blog/write-privacy-policy/)
 
 [無断引用はＯＫだけど無断転載はＮＧ？～３分で分かる引用と転載の違い～](https://www.biz-shikaku.com/mincho/column/227)
+{% endcomment %}
