@@ -1,6 +1,7 @@
 ---
 title: サイトポリシー
 permalink: /policy/
+toc: true
 ---
 
 ## プライバシーポリシー
