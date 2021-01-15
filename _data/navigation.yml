@@ -1,8 +1,8 @@
 # main links
 main:
-  - title: "POSTS"
-    url: /year-archive/
-    description: "年ごとにソートされた記事一覧"
+  - title: "ABOUT"
+    url: /about/
+    description: "当ブログ、私について"
   - title: "CATEGORIES"
     url: /categories/
     description: "カテゴリーごとにソートされた記事一覧"
@@ -11,10 +11,10 @@ main:
     description: "タグごとにソートされた記事一覧"
   - title: "PORTFOLIO"
     url: "/portfolio/"
-    description: "ポートフォリオ"
+    description: "作品集"
   - title: "CONTACT"
     url: "/contact/"
     description: "お問い合わせ"
   - title: "POLICY"
     url: "/policy/"
-    description: "ポリシー"
+    description: "サイトポリシー"
