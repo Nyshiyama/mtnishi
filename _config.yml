@@ -123,6 +123,9 @@ author:
     - label: "Qiita"
       icon: "fab fa-fw icon-qiita"
       url: "https://qiita.com/mt_west"
+    - label: "ブクログ"
+      icon: "fas fa-fw fa-book-open"
+      url: "https://booklog.jp/users/mononokeouzi"
 
 # Site Footer
 footer:
@@ -148,6 +151,9 @@ footer:
     - label: "Qiita"
       icon: "fab fa-fw icon-qiita"
       url: "https://qiita.com/mt_west"
+    - label: "ブクログ"
+      icon: "fas fa-fw fa-book-open"
+      url: "https://booklog.jp/users/mononokeouzi"
 
 
 # Reading Files
