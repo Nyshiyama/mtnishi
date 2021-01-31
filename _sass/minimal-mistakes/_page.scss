@@ -392,6 +392,10 @@ body {
   }
 }
 
+.taxonomy__subindex { // 親タグのクラスtaxonomy__indexで細かい指定はしているからこれで十分？
+  list-style: none;
+}
+
 .back-to-top {
   display: block;
   clear: both;
