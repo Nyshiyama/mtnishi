@@ -11,16 +11,42 @@ layout: archive
   {% endif %}
 {% endfor %}
 
+{% comment %}
+<!-- below is limited only in the case with all posts having a pair of (parent and child) categories -->
+{% endcomment %}
+
+{% capture posts_name %}
+  {% assign my_posts = site.posts | group_by: 'categories' %}
+  |{% for my_post in my_posts %}{% assign post_name = my_post.name | remove: "[" | remove: "]" | remove: '"' %}{{ post_name }}{% unless forloop.last %}|{% endunless %}{% endfor %}
+{% endcapture %}
+{% assign integrated_categories_names = posts_name | split: "|" | sort %}
+{% assign finished_categories = "nil, nil" | split: ", " %}
+
 <ul class="taxonomy__index">
   {% for i in (1..categories_max) reversed %}
     {% for category in site.categories %}
-      {% if category[1].size == i %}
-        <li>
-          <a href="#{{ category[0] | slugify }}">
-            <strong>{{ category[0] }}</strong> <span class="taxonomy__count">{{ i }}</span>
-          </a>
-        </li>
-      {% endif %}
+      {% for integrated_categories_name in integrated_categories_names %}
+        {% assign pair_categories = integrated_categories_name | split: ", " %}
+        {% if pair_categories[0] == category[0] and category[1].size == i %}
+          {% unless finished_categories contains pair_categories[0] %}
+            {% unless forloop.first %}
+              </li>
+            {% endunless %}
+            <li>
+              <a href="#{{ category[0] | slugify }}">
+                <strong>{{ category[0] }}</strong> <span class="taxonomy__count">{{ i }}</span>
+              </a>
+              {% assign finished_categories = finished_categories | concat: pair_categories %}
+          {% endunless %}
+          <ul class="taxonomy__subindex">
+            <li>
+              <a href="#{{ pair_categories[1] | slugify }}">
+                <strong>{{ pair_categories[1] }}</strong>
+              </a>
+            </li>
+          </ul>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
   {% endfor %}
 </ul>
