@@ -150,7 +150,7 @@ footer:
       icon: "fab fa-fw fa-instagram"
       # url:
     - label: "Qiita"
-      icon: "fab fa-fw icon-qiita"
+      icon: "fab icon-qiita"
       url: "https://qiita.com/mt_west"
     - label: "ブクログ"
       icon: "fas fa-fw fa-book-open"

@@ -324,11 +324,25 @@ body:hover .visually-hidden button {
   .fa-xing-square {
     color: $xing-color;
   }
+}
 
-  .icon-qiita {
-    content: url("../images/qiita.png");
-    color: #55C500;
-  }
+// https://saruwakakun.com/html-css/reference/change-before-after
+// https://muralnotes.com/css-secondary-image-responsive/
+.social-icons {
+    .icon-qiita::before {
+      padding-right: 5px;
+      padding-bottom: 4px; // manual adjustment
+      content: "";
+      display: inline-block;
+      font-size: $type-size-6;
+      height: 1.344em; // manual adjustment
+      width: 1.007em; // manual adjustment
+      background-image: url(../images/qiita.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      vertical-align: middle;
+      color: #55C500;
+    }
 }
 
 /*
