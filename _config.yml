@@ -18,7 +18,7 @@ minimal_mistakes_skin    : "aqua" # "default", # "air", "aqua", "contrast", "dar
 locale                   : "ja-JP" # en-US
 title                    : "Mt. Nishiブログ"
 title_separator          : "-"
-subtitle                 : "v1.5" # site tagline that appears below site title in masthead
+subtitle                 : "v1.6" # site tagline that appears below site title in masthead
 name                     : "Yudai Nishiyama"
 description              : "西山悠大の個人ブログです。プログラミング、アニメ、本、映画、その他積極的に思ったことをアウトプットします。"
 url                      : "https://Nyshiyama.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
