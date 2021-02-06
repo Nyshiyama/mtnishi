@@ -7,9 +7,9 @@ entries_layout: grid
 classes: wide
 ---
 
-[私について]({% link _pages/about.md %})
+[私について]({{ site.baseurl }}{% link _pages/about.md %})
 
-[お問い合わせ]({% link _pages/contact.md %})
+[お問い合わせ]({{ site.baseurl }}{% link _pages/contact.md %})
 
 ## Works
 
