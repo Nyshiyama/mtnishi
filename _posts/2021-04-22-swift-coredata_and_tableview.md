@@ -140,6 +140,10 @@ class AlbumSettingViewController: UIViewController {
 
 親ビューに戻ることを検知するDelegate methodとして、[NavigationBarの戻るボタンをハンドリングしたい - Qiita](https://qiita.com/fuwamaki/items/a5d8594086d2f813e72f)を参考に以下を定義する。
 
+`AlbumSettingViewController`クラス定義の`viewDidLoad()`内部で`navigationController?.delegate = self`を忘れない。
+
+また、ここでは親ビューとして`ViewController`を設定しているが、このクラス定義で`override func viewWillAppear()`を実装している場合、ライフサイクル上では`viewWillAppear()`が先に呼ばれてからこのDelegate methodが実行されることに注意する。
+
 ```swift
 extension AlbumSettingViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
