@@ -13,7 +13,7 @@ tags:
   - Relationships
 ---
 
-![alt]({{ "/assets/images/xcode-xcdatamodeld-album-tracks.png" | relative_url }})
+![alt]({{ "/assets/images/xcode-xcdatamodeld-album-tracks.jpg" | relative_url }})
 <figcaption>こんな感じで、Album1つに対してTrackが複数つながったRelationshipをもっている</figcaption>
 
 ## 調査
