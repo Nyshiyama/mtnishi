@@ -38,6 +38,16 @@ tags:
 
    [ImageOptim — better Save for Web](https://imageoptim.com/mac)：ローカルアプリはMacしかない
 
+   2021/09/24追記：
+   Thank you for your information!
+
+   問い合わせで、WEBSITEPLANETもいいよ、と教えていただいた。[ImageOptim online](https://imageoptim.com/online)とやることは似ているが、圧縮率が若干高いかも。
+
+   [WEBSITEPLANET](https://www.websiteplanet.com/ja/webtools/imagecompressor/)
+
+   ![websiteplanet test]({{ "/assets/images/websiteplanet-test.png" | relative_url }})
+   <figcaption>たしかImageOptimで圧縮していたけど、websiteplanetに入れたら少しだけ追加で圧縮された</figcaption>
+
 ## ヘッダーイメージとか
 
 大きい画像の場合は、サイズを表示される枠に合わせてできるだけ小さくする。あと、圧縮する際はMediumかHighのように、オリジナル近いクオリティを維持するように気をつける。うっかり粗くしてしまうとけっこう悲しい見た目になる笑
