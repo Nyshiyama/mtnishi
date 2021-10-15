@@ -1,7 +1,7 @@
 ---
 title: "なんとなくブログ再開とWeekly Ochiaiの阿片窟"
 header:
-  overlay_image: /assets/images/goodnotes_memo.jpg.jpg
+  overlay_image: /assets/images/goodnotes_memo.jpg
   overlay_filter: 0.5
 excerpt: "全然、家族以外と会話する機会のない生活をしている。
 別に、最悪一人暮らしするようになったらマジでだれともしゃべらないことになりそうでまあそうなったらそれでいいやとも考えている。
