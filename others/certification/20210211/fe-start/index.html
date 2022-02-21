@@ -1,0 +1,850 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ja" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>基本情報技術者試験受けます宣言 - Mt. Nishiブログ</title>
+<meta name="description" content="ぜんぜん参考書の内容が分からなかったので危機感をもった。">
+
+
+  <meta name="author" content="悠">
+  
+  <meta property="article:author" content="悠">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="Mt. Nishiブログ">
+<meta property="og:title" content="基本情報技術者試験受けます宣言">
+<meta property="og:url" content="https://nyshiyama.github.io/mtnishi/others/certification/20210211/fe-start/">
+
+
+  <meta property="og:description" content="ぜんぜん参考書の内容が分からなかったので危機感をもった。">
+
+
+
+  <meta property="og:image" content="https://nyshiyama.github.io/mtnishi/assets/images/panicman-freephoto.jpg">
+
+
+
+  <meta name="twitter:site" content="@mt_2shi">
+  <meta name="twitter:title" content="基本情報技術者試験受けます宣言">
+  <meta name="twitter:description" content="ぜんぜん参考書の内容が分からなかったので危機感をもった。">
+  <meta name="twitter:url" content="https://nyshiyama.github.io/mtnishi/others/certification/20210211/fe-start/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://nyshiyama.github.io/mtnishi/assets/images/panicman-freephoto.jpg">
+  
+
+  
+
+
+
+  <meta property="article:published_time" content="2021-02-11T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nyshiyama.github.io/mtnishi/others/certification/20210211/fe-start/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "悠 (Yu)",
+      "url": "https://nyshiyama.github.io/mtnishi/",
+      "sameAs": ["https://twitter.com/mt_2shi","https://github.com/Nyshiyama","https://qiita.com/mt_west"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/mtnishi/feed.xml" type="application/atom+xml" rel="alternate" title="Mt. Nishiブログ Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/mtnishi/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="shortcut icon" type="image/png" href=/mtnishi/assets/images/logo.png>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/mtnishi/"><img src="/mtnishi/assets/images/logo.png" alt=""></a>
+        
+        <a class="site-title" href="/mtnishi/">
+          Mt. Nishiブログ
+          <span class="site-subtitle">v2.0</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/mtnishi/about/" title="当ブログ、私について">ABOUT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/categories/" title="カテゴリーごとにソートされた記事一覧">CATEGORIES</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/tags/" title="タグごとにソートされた記事一覧">TAGS</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/portfolio/" title="作品集">PORTFOLIO</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/contact/" title="お問い合わせ">CONTACT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/policy/" title="サイトポリシー">POLICY</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">メニュー</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/mtnishi/assets/images/panicman-freephoto.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          基本情報技術者試験受けます宣言
+
+        
+      </h1>
+      
+        <p class="page__lead">ぜんぜん参考書の内容が分からなかったので危機感をもった。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-02-11T00:00:00+00:00">February 11, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minutes read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="https://Nyshiyama.github.io/mtnishi/" itemprop="item"><span itemprop="name">ホーム</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#others" itemprop="item"><span itemprop="name">Others</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#certification" itemprop="item"><span itemprop="name">Certification</span></a>
+          <meta itemprop="position" content="3" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#20210211" itemprop="item"><span itemprop="name">20210211</span></a>
+          <meta itemprop="position" content="4" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">基本情報技術者試験受けます宣言</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/mtnishi/assets/images/paint_by_petalica2.jpg" alt="悠" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">悠</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>興味ドリブンな人生を送っている自堕落人間</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">フォロー</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">大阪</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+            <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab fa-fw icon-qiita" aria-hidden="true"></i><span class="label">Qiita</span></a></li>
+          
+        
+          
+            <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i><span class="label">ブクログ</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="基本情報技術者試験受けます宣言">
+    <meta itemprop="description" content="ぜんぜん参考書の内容が分からなかったので危機感をもった。">
+    <meta itemprop="datePublished" content="2021-02-11T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p><a href="https://qiita.com/yusuke_blog1026/items/d6b079fa026ce6776773?utm_campaign=popular_items&amp;utm_medium=feed&amp;utm_source=popular_items">IT知識0から1ヶ月で基本情報技術者試験に合格した話 - Qiita</a>を読んだ。たしかに、工学研究室には居たけど、ITエンジニア本職と共通認識を持ってしゃべれるのか？ちょうど本屋に行く用事があったので参考書をパラパラ見てみる→わっからん。</p>
+
+<p>なんというか、今までWEEKLY OCHIAIとか、技術記事とか読んだときに知らないアルファベット略語が出てきたらその都度調べていたことが全部載っていた感じ。これを勉強してないと実際のエンジニア的会話で置いてけぼりになる焦りが出てきた。い、いまさらではない。勉強にいまさらなんてない。</p>
+
+<p>3日で受かる記事（<a href="https://qiita.com/toedango86/items/4f07e7ee96830b3bae20">3日間の独学で基本情報技術者試験に合格したので、その勉強法を公開します！【初心者｜忙しい人向け】 - Qiita</a>）を読んで勇気が湧く。実際は3日以上勉強しているけど。</p>
+
+<p>ITエンジニアの登竜門だと。全然意識できてなかったな。</p>
+
+<blockquote>
+  <p>ITエンジニアとしてキャリアをスタートするには、まず基本情報技術者試験から受験することをお勧めします。しっかりとした基礎を身に付けることにより、その後の応用力の幅が格段に広がります。</p>
+</blockquote>
+
+<p><a href="https://www.jitec.ipa.go.jp/1_11seido/fe.html">IPA 独立行政法人 情報処理推進機構：制度の概要：基本情報技術者試験</a></p>
+
+<h2 id="というわけで">というわけで</h2>
+
+<p>最短コースでインプット&amp;資格取得を目指す。<a href="https://qiita.com/toedango86/items/4f07e7ee96830b3bae20">3日で〜という記事</a>があったが実際は3日ではないし、<a href="https://qiita.com/yusuke_blog1026/items/d6b079fa026ce6776773?utm_campaign=popular_items&amp;utm_medium=feed&amp;utm_source=popular_items">医学部の人間がかなり丁寧だが1か月かけて素人状態から合格したこと</a>を勘案して、ひとまず2週間を勉強期間とする。学習方法としては、医学部さんに倣う。</p>
+
+<p>午前は<del>道場に直接アタックして勉強</del> 数問見たところで「これ以上解かんでもわかる、モチベ下がるやつや」→キタミをまず1周してから過去問道場に向かう。</p>
+
+<p>午後は各分野（以下のように絞った範囲）において、過去問道場で全体を確認、キタミで頭に入れて、道場問題を解く。間違えた問題はキタミまたは合格教本で復習インプット。全分野道場4周以内に9割正答率を目指す。8割いったら（ちなみに合格ラインは午前午後両方とも6割）その分野の勉強は直前に復習する以外終了。</p>
+
+<p>時間を1日どれくらいかけられるか？→同時並行でプログラミングの勉強もしたいので、一日にかけられる時間はそうない。2週間で合格するためにはどれくらい時間を掛ける必要があるのかまったく実感がわかないので、早い段階で道場を全分野1周してみる。それにかかる時間を計測して、点数も含めた必要時間を算出する。</p>
+
+<p>以上、まとめると</p>
+
+<ol>
+  <li>まずキタミを1周、合計勉強時間24時間以内を目指す</li>
+  <li>午前午後過去問道場1回分を解く+復習、これに何時間かかるか計測して、午前午後22回分x3周の必要時間を算出</li>
+  <li>算出した時点で最短時間消化後の日を試験日として予約</li>
+  <li><del>魂</del> 命を燃やす→<a href="https://dic.pixiv.net/a/%E5%91%BD%E3%82%92%E7%87%83%E3%82%84%E3%81%9B%21%21%21%21">命を燃やせ!!!! (いのちをもやせ)とは【ピクシブ百科事典】</a></li>
+</ol>
+
+<p>また、午後の勉強分野は以下のように絞る。</p>
+
+<ul>
+  <li>午後問1情報セキュリティは必須</li>
+  <li>午後問2−5選択問題はデータベース、ソフトウェア設計、ハードウェア、ソフトウェアの4分野に絞って</li>
+  <li>午後問6データ構造/アルゴリズムは必須</li>
+  <li>午後問7−11選択問題は表計算ソフトを選ぶ</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> タグ: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/tags/#%E5%9F%BA%E6%9C%AC%E6%83%85%E5%A0%B1%E6%8A%80%E8%A1%93%E8%80%85%E8%A9%A6%E9%A8%93" class="page__taxonomy-item" rel="tag">基本情報技術者試験</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#%E7%8B%AC%E5%AD%A6" class="page__taxonomy-item" rel="tag">独学</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#%E8%B3%87%E6%A0%BC" class="page__taxonomy-item" rel="tag">資格</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> カテゴリー: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/categories/#certification" class="page__taxonomy-item" rel="tag">Certification</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/categories/#others" class="page__taxonomy-item" rel="tag">Others</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新日時:</strong> <time datetime="2021-02-11T00:00:00+00:00">February 11, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">共有</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=mt_2shi&text=%E5%9F%BA%E6%9C%AC%E6%83%85%E5%A0%B1%E6%8A%80%E8%A1%93%E8%80%85%E8%A9%A6%E9%A8%93%E5%8F%97%E3%81%91%E3%81%BE%E3%81%99%E5%AE%A3%E8%A8%80%20https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fothers%2Fcertification%2F20210211%2Ffe-start%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fothers%2Fcertification%2F20210211%2Ffe-start%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fothers%2Fcertification%2F20210211%2Ffe-start%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/mtnishi/entertainment/anime/20210210/miraisyonenconan/" class="pagination--pager" title="未来少年コナンの視聴終了
+">前へ</a>
+    
+    
+      <a href="/mtnishi/others/diary/20210212/zatsudan/" class="pagination--pager" title="久しぶりに登学して思うこと
+">次へ</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">関連記事</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210602/weekly_ochiai/" rel="permalink">WEEKLY OCHIAI：枝野代表に「覚悟」を問う
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-02T00:00:00+00:00">June 2, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">まさかの1on1。落合vs枝野。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/entertainment/anime/20210530/anime-supercub/" rel="permalink">トネ・コーケン著ライトノベル原作「スーパーカブ」を6話まで視聴
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-30T00:00:00+00:00">May 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">スーパーカブを6話まで視聴した。ネトフリにない……！？Amazonにあった。よかったよかった。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210529/fishing-umikku/" rel="permalink">釣り@ウミック
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-29T00:00:00+00:00">May 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">福井県大飯郡高浜町音海のウミックにて、筏釣りに興じた。自分の釣果は50cmのエソ1匹笑
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/system/programming/20210528/swift-load-csv-to-coredata/" rel="permalink">【Swift】CSVを読み込んでCoreDataに保存（Xcode12.4、Swift 5.3.2）
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00+00:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          10 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">CoreDataを使って、音楽アプリのアルバムとトラックをそれぞれAlbum、Trackエンティティとして管理しているが、それらをCSVファイルで管理できるようにしたい。手始めに、手動でCSVファイルを作り、プログラムで読み込んでそれらをCoreDataに保存させた。やってみたらスマートではないかもしれないが簡単...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="検索キーワードを入力してください..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>フォロー</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab icon-qiita" aria-hidden="true"></i> Qiita</a></li>
+        
+      
+        
+          <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i> ブクログ</a></li>
+        
+      
+    
+
+    <li><a href="/mtnishi/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020-2022 悠 (Yu). Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/mtnishi/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/mtnishi/assets/js/lunr/lunr.min.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-store.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

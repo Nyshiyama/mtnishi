@@ -1,0 +1,901 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ja" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2） - Mt. Nishiブログ</title>
+<meta name="description" content="色々と試したので、忘れないうちにまとめておく。">
+
+
+  <meta name="author" content="悠">
+  
+  <meta property="article:author" content="悠">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="Mt. Nishiブログ">
+<meta property="og:title" content="Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2）">
+<meta property="og:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210507/swift-tableviewcell/">
+
+
+  <meta property="og:description" content="色々と試したので、忘れないうちにまとめておく。">
+
+
+
+  <meta property="og:image" content="https://nyshiyama.github.io/mtnishi/assets/images/pc-freephoto.jpg">
+
+
+
+  <meta name="twitter:site" content="@mt_2shi">
+  <meta name="twitter:title" content="Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2）">
+  <meta name="twitter:description" content="色々と試したので、忘れないうちにまとめておく。">
+  <meta name="twitter:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210507/swift-tableviewcell/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://nyshiyama.github.io/mtnishi/assets/images/pc-freephoto.jpg">
+  
+
+  
+
+
+
+  <meta property="article:published_time" content="2021-05-07T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nyshiyama.github.io/mtnishi/system/programming/20210507/swift-tableviewcell/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "悠 (Yu)",
+      "url": "https://nyshiyama.github.io/mtnishi/",
+      "sameAs": ["https://twitter.com/mt_2shi","https://github.com/Nyshiyama","https://qiita.com/mt_west"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/mtnishi/feed.xml" type="application/atom+xml" rel="alternate" title="Mt. Nishiブログ Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/mtnishi/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="shortcut icon" type="image/png" href=/mtnishi/assets/images/logo.png>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/mtnishi/"><img src="/mtnishi/assets/images/logo.png" alt=""></a>
+        
+        <a class="site-title" href="/mtnishi/">
+          Mt. Nishiブログ
+          <span class="site-subtitle">v2.0</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/mtnishi/about/" title="当ブログ、私について">ABOUT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/categories/" title="カテゴリーごとにソートされた記事一覧">CATEGORIES</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/tags/" title="タグごとにソートされた記事一覧">TAGS</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/portfolio/" title="作品集">PORTFOLIO</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/contact/" title="お問い合わせ">CONTACT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/policy/" title="サイトポリシー">POLICY</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">メニュー</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/mtnishi/assets/images/pc-freephoto.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2）
+
+        
+      </h1>
+      
+        <p class="page__lead">色々と試したので、忘れないうちにまとめておく。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-07T00:00:00+00:00">May 7, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minutes read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="https://Nyshiyama.github.io/mtnishi/" itemprop="item"><span itemprop="name">ホーム</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#system" itemprop="item"><span itemprop="name">System</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#programming" itemprop="item"><span itemprop="name">Programming</span></a>
+          <meta itemprop="position" content="3" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#20210507" itemprop="item"><span itemprop="name">20210507</span></a>
+          <meta itemprop="position" content="4" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2）</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/mtnishi/assets/images/paint_by_petalica2.jpg" alt="悠" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">悠</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>興味ドリブンな人生を送っている自堕落人間</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">フォロー</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">大阪</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+            <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab fa-fw icon-qiita" aria-hidden="true"></i><span class="label">Qiita</span></a></li>
+          
+        
+          
+            <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i><span class="label">ブクログ</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Table View Cell上のImageをタップせずに編集したい（Xcode12.4、Swift 5.3.2）">
+    <meta itemprop="description" content="色々と試したので、忘れないうちにまとめておく。">
+    <meta itemprop="datePublished" content="2021-05-07T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>基本的なファイル構成や定義は、<a href="https://qiita.com/mzuk/items/0efc41460631c7c98c3c">TableViewCellにボタン付けていろいろやる - Qiita</a>にならっている。これを見る前にまずQiita記事を読もう……記事が消滅したときのために（あと忘れたときに記事まで見返すのは面倒）、必要最低限の定義を説明しておく。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">class MyCustomCell: UITableViewCell {...}</code>として、セルに使うクラスを便利なものにしておく。このクラスに<code class="language-plaintext highlighter-rouge">@IBOutlet</code>でStoryboardに配置したImageとかを接続しておけば、<code class="language-plaintext highlighter-rouge">cell.cellImage = </code>みたいにアクセスしやすくなる。</li>
+  <li>Table View CellのIdentifierは「MyCustomCell」</li>
+</ul>
+
+<h2 id="やりたいこと">やりたいこと</h2>
+
+<p><code class="language-plaintext highlighter-rouge">cell.cellImage.isHidden = true/false</code>を任意のタイミングで切り替えたい。セルをタップしているいないに限らず。</p>
+
+<h2 id="タップする場合">タップする場合</h2>
+
+<p>一応書いておく。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">UITableViewDelegate</span><span class="p">,</span> <span class="kt">UITableViewDataSource</span> <span class="p">{</span>
+    <span class="kd">@IBOutlet</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="o">!</span>
+
+    <span class="c1">// 省略</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">didSelectRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">cellForRow</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">MyCustomCell</span>
+        <span class="c1">// cellに対する処理をここに書く</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="タップしない場合">タップしない場合</h2>
+
+<h3 id="table-viewの再描画">Table Viewの再描画</h3>
+
+<p>今の本命。下の例ではViewControllerクラスファイルが一番きれいになるので。Delegate method（<code class="language-plaintext highlighter-rouge">func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)</code>）内部が増えるのは気にしない。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">UITableViewDelegate</span><span class="p">,</span> <span class="kt">UITableViewDataSource</span> <span class="p">{</span>
+
+    <span class="c1">// 省略</span>
+
+    <span class="c1">// セル上の何かを変更したいタイミングで</span>
+    <span class="n">tableView</span><span class="o">.</span><span class="nf">reloadData</span><span class="p">()</span>
+
+    <span class="c1">// 別ファイルやクラスで実行したければ、たとえばstatic var presentTableView: UITableViewを定義しておいて</span>
+    <span class="n">anotherClass</span><span class="o">.</span><span class="n">presentTableView</span> <span class="o">=</span> <span class="n">tableView</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"MyCustomCell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">MyCustomCell</span>
+
+        <span class="c1">// Cellの初期設定（MyCustomCellクラスで定義したメソッド）</span>
+        <span class="n">cell</span><span class="o">.</span><span class="nf">setCell</span><span class="p">(</span><span class="n">myCustomDatas</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">])</span>
+
+        <span class="c1">// indexRow: Int = 何か数字</span>
+        <span class="c1">// 適当にif条件をつけてセルをアップデートする・しない</span>
+        <span class="c1">// updateCellはMyCustomCellクラスで定義したメソッド</span>
+        <span class="k">if</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span> <span class="o">==</span> <span class="n">indexRow</span> <span class="p">{</span>
+            <span class="n">cell</span><span class="o">.</span><span class="nf">updateCell</span><span class="p">(</span><span class="nv">update</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cell</span><span class="o">.</span><span class="nf">updateCell</span><span class="p">(</span><span class="nv">update</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">cell</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="ボタン経由">ボタン経由</h3>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 適当にStoryboardでボタンを配置してファイルと接続</span>
+<span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">testButton</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">UIButton</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">sender</span><span class="o">.</span><span class="n">superview</span><span class="p">?</span><span class="o">.</span><span class="n">superview</span> <span class="k">as!</span> <span class="kt">MyCustomCell</span>
+    <span class="c1">// cellに対する処理をここに書く</span>
+
+    <span class="c1">// おまけ：rowを取得する</span>
+    <span class="k">let</span> <span class="nv">row</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">indexPath</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">cell</span><span class="p">)?</span><span class="o">.</span><span class="n">row</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="indexpath経由">IndexPath経由</h3>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// indexRow: Int = 何か数字</span>
+<span class="c1">// indexColumn: Int = Table View Cellの列数（たいていゼロ）</span>
+<span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">cellForRow</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="p">[</span><span class="n">indexColumn</span><span class="p">,</span> <span class="n">indexRow</span><span class="p">])</span> <span class="k">as!</span> <span class="kt">MyCustomCell</span>
+<span class="c1">// cellに対する処理をここに書く</span>
+</code></pre></div></div>
+
+<h2 id="参考">参考</h2>
+
+<p>今回、とくに参考としたのは星マークをつけたもの。それ以外は使えるかもって思ったけど本命ではない、けど念の為資料として残しておく。</p>
+
+<p><br /><a href="https://qiita.com/eito_2/items/3af91336fea43f40b4d2">UITableViewにUIButtonを追加する - Qiita</a>
+<br /><a href="https://ymgsapo.com/2020/06/25/swift-how-to-make-favorite-star/">【Swift】TableViewにお気に入りボタンを実装する方法 | yamagablog</a>
+<br />★<a href="https://qiita.com/mzuk/items/0efc41460631c7c98c3c">TableViewCellにボタン付けていろいろやる - Qiita</a>
+<br /><a href="https://teratail.com/questions/58402">Xcode - UITableViewCellの中のボタンの処理｜teratail</a>
+<br /><a href="https://stackoverflow.com/questions/32304349/insets-to-uiimageview">ios - Insets to UIImageView? - Stack Overflow</a>：UIImage.withAlignmentRectInsets
+<br />★<a href="http://seeku.hateblo.jp/entry/2015/06/26/072712">セルの選択で対応する曲を再生 - 開発メモ</a></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> タグ: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/tags/#swift" class="page__taxonomy-item" rel="tag">Swift</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#table-view-cell" class="page__taxonomy-item" rel="tag">Table View Cell</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#xcode" class="page__taxonomy-item" rel="tag">Xcode</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> カテゴリー: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/categories/#programming" class="page__taxonomy-item" rel="tag">Programming</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/categories/#system" class="page__taxonomy-item" rel="tag">System</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新日時:</strong> <time datetime="2021-05-07T00:00:00+00:00">May 7, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">共有</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=mt_2shi&text=Table+View+Cell%E4%B8%8A%E3%81%AEImage%E3%82%92%E3%82%BF%E3%83%83%E3%83%97%E3%81%9B%E3%81%9A%E3%81%AB%E7%B7%A8%E9%9B%86%E3%81%97%E3%81%9F%E3%81%84%EF%BC%88Xcode12.4%E3%80%81Swift+5.3.2%EF%BC%89%20https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210507%2Fswift-tableviewcell%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210507%2Fswift-tableviewcell%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210507%2Fswift-tableviewcell%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/mtnishi/system/dev-blog/20210506/web-image-upload/" class="pagination--pager" title="ブログ用の写真用意について
+">前へ</a>
+    
+    
+      <a href="/mtnishi/system/dev-blog/20210508/blog-github/" class="pagination--pager" title="数か月ぶりにブログをGitHubのリモートリポジトリにPushした。
+">次へ</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">関連記事</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210602/weekly_ochiai/" rel="permalink">WEEKLY OCHIAI：枝野代表に「覚悟」を問う
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-02T00:00:00+00:00">June 2, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">まさかの1on1。落合vs枝野。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/entertainment/anime/20210530/anime-supercub/" rel="permalink">トネ・コーケン著ライトノベル原作「スーパーカブ」を6話まで視聴
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-30T00:00:00+00:00">May 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">スーパーカブを6話まで視聴した。ネトフリにない……！？Amazonにあった。よかったよかった。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210529/fishing-umikku/" rel="permalink">釣り@ウミック
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-29T00:00:00+00:00">May 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">福井県大飯郡高浜町音海のウミックにて、筏釣りに興じた。自分の釣果は50cmのエソ1匹笑
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/system/programming/20210528/swift-load-csv-to-coredata/" rel="permalink">【Swift】CSVを読み込んでCoreDataに保存（Xcode12.4、Swift 5.3.2）
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00+00:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          10 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">CoreDataを使って、音楽アプリのアルバムとトラックをそれぞれAlbum、Trackエンティティとして管理しているが、それらをCSVファイルで管理できるようにしたい。手始めに、手動でCSVファイルを作り、プログラムで読み込んでそれらをCoreDataに保存させた。やってみたらスマートではないかもしれないが簡単...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="検索キーワードを入力してください..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>フォロー</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab icon-qiita" aria-hidden="true"></i> Qiita</a></li>
+        
+      
+        
+          <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i> ブクログ</a></li>
+        
+      
+    
+
+    <li><a href="/mtnishi/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020-2022 悠 (Yu). Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/mtnishi/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/mtnishi/assets/js/lunr/lunr.min.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-store.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

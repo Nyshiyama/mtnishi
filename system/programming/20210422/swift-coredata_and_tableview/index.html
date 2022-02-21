@@ -1,0 +1,1023 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ja" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2） - Mt. Nishiブログ</title>
+<meta name="description" content="用語や考え方が合ってんのかしらんけど、配列とMOCは区別をつけておかないと混乱する。">
+
+
+  <meta name="author" content="悠">
+  
+  <meta property="article:author" content="悠">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="Mt. Nishiブログ">
+<meta property="og:title" content="CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2）">
+<meta property="og:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210422/swift-coredata_and_tableview/">
+
+
+  <meta property="og:description" content="用語や考え方が合ってんのかしらんけど、配列とMOCは区別をつけておかないと混乱する。">
+
+
+
+  <meta property="og:image" content="https://nyshiyama.github.io/mtnishi/assets/images/pc-freephoto.jpg">
+
+
+
+  <meta name="twitter:site" content="@mt_2shi">
+  <meta name="twitter:title" content="CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2）">
+  <meta name="twitter:description" content="用語や考え方が合ってんのかしらんけど、配列とMOCは区別をつけておかないと混乱する。">
+  <meta name="twitter:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210422/swift-coredata_and_tableview/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://nyshiyama.github.io/mtnishi/assets/images/pc-freephoto.jpg">
+  
+
+  
+
+
+
+  <meta property="article:published_time" content="2021-04-22T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nyshiyama.github.io/mtnishi/system/programming/20210422/swift-coredata_and_tableview/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "悠 (Yu)",
+      "url": "https://nyshiyama.github.io/mtnishi/",
+      "sameAs": ["https://twitter.com/mt_2shi","https://github.com/Nyshiyama","https://qiita.com/mt_west"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/mtnishi/feed.xml" type="application/atom+xml" rel="alternate" title="Mt. Nishiブログ Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/mtnishi/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="shortcut icon" type="image/png" href=/mtnishi/assets/images/logo.png>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/mtnishi/"><img src="/mtnishi/assets/images/logo.png" alt=""></a>
+        
+        <a class="site-title" href="/mtnishi/">
+          Mt. Nishiブログ
+          <span class="site-subtitle">v2.0</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/mtnishi/about/" title="当ブログ、私について">ABOUT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/categories/" title="カテゴリーごとにソートされた記事一覧">CATEGORIES</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/tags/" title="タグごとにソートされた記事一覧">TAGS</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/portfolio/" title="作品集">PORTFOLIO</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/contact/" title="お問い合わせ">CONTACT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/policy/" title="サイトポリシー">POLICY</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">メニュー</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/mtnishi/assets/images/pc-freephoto.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2）
+
+        
+      </h1>
+      
+        <p class="page__lead">用語や考え方が合ってんのかしらんけど、配列とMOCは区別をつけておかないと混乱する。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-04-22T00:00:00+00:00">April 22, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          13 minutes read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="https://Nyshiyama.github.io/mtnishi/" itemprop="item"><span itemprop="name">ホーム</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#system" itemprop="item"><span itemprop="name">System</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#programming" itemprop="item"><span itemprop="name">Programming</span></a>
+          <meta itemprop="position" content="3" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#20210422" itemprop="item"><span itemprop="name">20210422</span></a>
+          <meta itemprop="position" content="4" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2）</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/mtnishi/assets/images/paint_by_petalica2.jpg" alt="悠" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">悠</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>興味ドリブンな人生を送っている自堕落人間</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">フォロー</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">大阪</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+            <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab fa-fw icon-qiita" aria-hidden="true"></i><span class="label">Qiita</span></a></li>
+          
+        
+          
+            <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i><span class="label">ブクログ</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="CoreDataをTableViewで扱う（リストの並び替え、削除との連携について）（Xcode12.4、Swift 5.3.2）">
+    <meta itemprop="description" content="用語や考え方が合ってんのかしらんけど、配列とMOCは区別をつけておかないと混乱する。">
+    <meta itemprop="datePublished" content="2021-04-22T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>先に言っておくと<code class="language-plaintext highlighter-rouge">CoreDataModel</code>は自分で定義したクラスのこと。記事中に部分的なソースコードを、記事末尾に現時点の<code class="language-plaintext highlighter-rouge">class CoreDataModel</code>ソースコードを載せておく。GitHub？まあ慌てるな。</p>
+
+<h2 id="配列操作とmoc操作を区別する">配列操作とMOC操作を区別する</h2>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Trackエンティティを定義していたとして、[Track]のインスタンスを作成</span>
+<span class="k">var</span> <span class="nv">tracks</span> <span class="o">=</span> <span class="kt">CoreDataModel</span><span class="o">.</span><span class="nf">fetchTracks</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+
+<span class="c1">// tracksの処理としてindexPath.row番目の要素を削除</span>
+<span class="kt">CoreDataModel</span><span class="o">.</span><span class="nf">delete</span><span class="p">(</span><span class="nv">track</span><span class="p">:</span> <span class="n">tracks</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">])</span>
+<span class="n">tracks</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>上記<code class="language-plaintext highlighter-rouge">tracks</code>の処理を2種類書いたが、これらは別物。上はMOC処理で、下は単なる配列処理。どちらも実行するか、間にもう一度fetch処理として<code class="language-plaintext highlighter-rouge">tracks = CoreDataModel.fetchTracks(with: nil)</code>を入れないと、整合性がとれなくなる。</p>
+
+<h3 id="track各要素のプロパティは">[Track]各要素のプロパティは？</h3>
+
+<p>「<code class="language-plaintext highlighter-rouge">tracks</code>のプロパティを編集する＝MOC処理」である。配列操作の<code class="language-plaintext highlighter-rouge">remove()</code>はなぜ区別されるのだろう。</p>
+
+<p>例：<code class="language-plaintext highlighter-rouge">tracks.lazy.filter { $0.index &gt; Int16(indexPath.row) }.forEach { $0.index -= 1 }</code></p>
+
+<p>要は、<code class="language-plaintext highlighter-rouge">tracks.index</code>というAttributeが<code class="language-plaintext highlighter-rouge">indexPath.row</code>より大きい要素に対してのみ<code class="language-plaintext highlighter-rouge">forEach</code>で操作「<code class="language-plaintext highlighter-rouge">各要素.index</code>をマイナス1する」を実行する。これでMOC上は<code class="language-plaintext highlighter-rouge">index</code>が変更したことになっている。これは昨日書いたように<code class="language-plaintext highlighter-rouge">CoreDataModel.save()</code>を実行するまでDBへ保存されないことに注意する。</p>
+
+<h2 id="リストの並び替え">リストの並び替え</h2>
+
+<p>TableView上で並び替えたら、MOC上のデータも並び替わってほしい。</p>
+
+<h3 id="並び順を保持するindexをentityのattributeに追加">並び順を保持するindexをEntityのAttributeに追加</h3>
+
+<p>先出ししているが、DBは配列ではないので、本来は並び順をもたない。そこで並び順を保持する<code class="language-plaintext highlighter-rouge">index</code>をEntityのAttributeに追加する。考え方は<a href="https://ja.stackoverflow.com/questions/33750/coredata%E3%81%A7%E4%B8%A6%E3%81%B3%E9%A0%86%E3%82%92%E4%BF%9D%E5%AD%98%E3%81%97%E3%81%9F%E3%81%84">swift - CoreDataで並び順を保存したい - スタック・オーバーフロー</a>に倣った。</p>
+
+<p><img src="/mtnishi/assets/images/xcode-entity-attribute-index.png" alt="alt" /></p>
+
+<p>で、「Swift TableView 並び替え」でググったら出てくる<code class="language-plaintext highlighter-rouge">func tableView</code>を使って、リスト上に表示させている配列としての<code class="language-plaintext highlighter-rouge">tracks: [Track]</code>操作と、並び替わった配列の順番を基に<code class="language-plaintext highlighter-rouge">index</code>を再定義する。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 「Swift TableView 並び替え」でググったら出てくるfunc tableView</span>
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">moveRowAt</span> <span class="nv">sourceIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">,</span> <span class="n">to</span> <span class="nv">destinationIndexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">sourceIndexPathRow</span> <span class="o">=</span> <span class="n">sourceIndexPath</span><span class="o">.</span><span class="n">row</span>
+        <span class="k">let</span> <span class="nv">destinationIndexPathRow</span> <span class="o">=</span> <span class="n">destinationIndexPath</span><span class="o">.</span><span class="n">row</span>
+        <span class="k">let</span> <span class="nv">tmp</span> <span class="o">=</span> <span class="n">tracks</span><span class="p">[</span><span class="n">sourceIndexPathRow</span><span class="p">]</span>
+
+        <span class="c1">// まずはtracks配列を操作</span>
+        <span class="n">tracks</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">sourceIndexPathRow</span><span class="p">)</span>
+        <span class="n">tracks</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="nv">at</span><span class="p">:</span> <span class="n">destinationIndexPathRow</span><span class="p">)</span>
+        <span class="n">tracksTableView</span><span class="o">.</span><span class="nf">reloadData</span><span class="p">()</span>
+
+        <span class="c1">// MOC側のindexを更新する</span>
+        <span class="k">var</span> <span class="nv">iFirst</span> <span class="o">=</span> <span class="n">sourceIndexPathRow</span>
+        <span class="k">var</span> <span class="nv">iEnd</span> <span class="o">=</span> <span class="n">destinationIndexPathRow</span>
+
+        <span class="k">if</span> <span class="n">iFirst</span> <span class="o">&gt;</span> <span class="n">iEnd</span> <span class="p">{</span>
+            <span class="n">iFirst</span> <span class="o">=</span> <span class="n">destinationIndexPathRow</span>
+            <span class="n">iEnd</span> <span class="o">=</span> <span class="n">sourceIndexPathRow</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="n">iFirst</span><span class="o">...</span><span class="n">iEnd</span> <span class="p">{</span>
+            <span class="n">tracks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="kt">Int16</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">index</code>の更新があまりかっこよくないというか、実直な実装というか、もっとスマートに書けないものか……。ちなみに先述した配列操作とMOC操作の区別はここにも（見た目は分かりづらいが）生き残っており、あくまでこの時点では並び替わった<code class="language-plaintext highlighter-rouge">tracks</code>の順番に沿って<code class="language-plaintext highlighter-rouge">index</code>を再定義しただけで、MOC上の順番はまだ並び替わっていない。</p>
+
+<p>そこで、<code class="language-plaintext highlighter-rouge">[Track]</code>をfetchする前に、いつも<code class="language-plaintext highlighter-rouge">index</code>昇順にソートさせればよい。別にここは<code class="language-plaintext highlighter-rouge">index</code>を再定義した直後に並び替え&amp;Fetchをしてもよいが、実装的には慌てるこっちゃなかったのでそうしなかった。実装もスマートになるし。<code class="language-plaintext highlighter-rouge">CoreDataModel.fetchTracks()</code>の内部で、以下のように<code class="language-plaintext highlighter-rouge">sortDescriptors</code>を定義しておけば良い。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">fetchRequest</span><span class="o">.</span><span class="n">sortDescriptors</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="kt">NSSortDescriptor</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"index"</span><span class="p">,</span> <span class="nv">ascending</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="リストの削除">リストの削除</h2>
+
+<p>並び替えと似たノリになる。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 「Swift TableView 削除」でググったら出てくるfunc tableView</span>
+<span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">commit</span> <span class="nv">editingStyle</span><span class="p">:</span> <span class="kt">UITableViewCell</span><span class="o">.</span><span class="kt">EditingStyle</span><span class="p">,</span> <span class="n">forRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">editingStyle</span> <span class="o">==</span> <span class="o">.</span><span class="n">delete</span> <span class="p">{</span>
+            <span class="c1">// tracks.remove()は配列処理なので先にMOC処理が必要</span>
+            <span class="kt">CoreDataModel</span><span class="o">.</span><span class="nf">delete</span><span class="p">(</span><span class="nv">track</span><span class="p">:</span> <span class="n">tracks</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">])</span>
+            <span class="n">tracks</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">tracksTableView</span><span class="o">.</span><span class="nf">reloadData</span><span class="p">()</span>
+
+            <span class="c1">// MOCのindexを更新する</span>
+            <span class="n">tracks</span><span class="o">.</span><span class="kd">lazy</span><span class="o">.</span><span class="n">filter</span> <span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="kt">Int16</span><span class="p">(</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">)</span> <span class="p">}</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="n">index</span> <span class="o">-=</span> <span class="mi">1</span> <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>”先に”MOC処理が必要である。あくまで上記実装の場合であるが、順番を逆にすると</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">tracks[indexPath.row]</code>が削除される</li>
+  <li><code class="language-plaintext highlighter-rouge">CoreDataModel.delete(track: tracks[indexPath.row])</code> の引数に入るものは1で要素が1つずれた<code class="language-plaintext highlighter-rouge">tracks</code>に対して調べられる</li>
+  <li>TableView上の削除操作と、表示しているデータで削除されるものが一致しない</li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">index</code>の更新は先述の通り、<code class="language-plaintext highlighter-rouge">tracks.index</code>というAttributeが<code class="language-plaintext highlighter-rouge">indexPath.row</code>より大きい要素に対してのみ<code class="language-plaintext highlighter-rouge">forEach</code>で操作「<code class="language-plaintext highlighter-rouge">各要素.index</code>をマイナス1する」を実行する。削除した要素より小さい要素番号に対しては<code class="language-plaintext highlighter-rouge">index</code>を更新する意味がない。</p>
+
+<h2 id="moc処理を確定するタイミングを操作する">MOC処理を確定するタイミングを操作する</h2>
+
+<p>まだ製作途中なので奇妙なUIだが、たとえばNavigation Controllerを使って画面を遷移させているとして、画面下の「確定」ボタンが押される前に左上のBackボタンやスワイプで親ビューに戻った場合はEdit等で行ったMOC処理結果を破棄したいとする。「確定」ボタンが押されるとMOC処理結果が確定される、つまりDBに処理結果を送信してもらう。また、それ以外の画面遷移ではMOC処理結果を保持しておいてほしい。</p>
+
+<p><img src="/mtnishi/assets/images/xcode-app-album-view.png" alt="alt" width="300px" /></p>
+
+<p>えんやこらと悩んだが、そのかいあって？実装はなかなかスマートにできたんじゃないだろうか。</p>
+
+<p>上記画面が<code class="language-plaintext highlighter-rouge">AlbumSettingViewController</code>をCustom Classにしているとして、まず確定ボタンには<code class="language-plaintext highlighter-rouge">CoreDataModel.save()</code>でMOC処理結果をDBに送るのと、確定することを明示するブーリアン<code class="language-plaintext highlighter-rouge">isSavingTheEditedAlbum</code>を<code class="language-plaintext highlighter-rouge">true</code>にする。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">AlbumSettingViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">isSavingTheEditedAlbum</span> <span class="o">=</span> <span class="kc">false</span>
+
+    <span class="c1">// 確定ボタン</span>
+    <span class="kd">@IBAction</span> <span class="kd">func</span> <span class="nf">saveAlbumButton</span><span class="p">(</span><span class="n">_</span> <span class="nv">sender</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">CoreDataModel</span><span class="o">.</span><span class="nf">save</span><span class="p">()</span> <span class="c1">// 編集内容を確定する</span>
+        <span class="n">isSavingTheEditedAlbum</span> <span class="o">=</span> <span class="kc">true</span>
+
+        <span class="c1">// これでNavigation Controllerを使って親ビューから遷移していた画面をもどせる</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">navigationController</span><span class="p">?</span><span class="o">.</span><span class="nf">popViewController</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>親ビューに戻ることを検知するDelegate methodとして、<a href="https://qiita.com/fuwamaki/items/a5d8594086d2f813e72f">NavigationBarの戻るボタンをハンドリングしたい - Qiita</a>を参考に以下を定義する。</p>
+
+<p><code class="language-plaintext highlighter-rouge">AlbumSettingViewController</code>クラス定義の<code class="language-plaintext highlighter-rouge">viewDidLoad()</code>内部で<code class="language-plaintext highlighter-rouge">navigationController?.delegate = self</code>を忘れない。</p>
+
+<p>また、ここでは親ビューとして<code class="language-plaintext highlighter-rouge">ViewController</code>を設定しているが、このクラス定義で<code class="language-plaintext highlighter-rouge">override func viewWillAppear()</code>を実装している場合、ライフサイクル上では<code class="language-plaintext highlighter-rouge">viewWillAppear()</code>が先に呼ばれてからこのDelegate methodが実行されることに注意する。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">extension</span> <span class="kt">AlbumSettingViewController</span><span class="p">:</span> <span class="kt">UINavigationControllerDelegate</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">navigationController</span><span class="p">(</span><span class="n">_</span> <span class="nv">navigationController</span><span class="p">:</span> <span class="kt">UINavigationController</span><span class="p">,</span> <span class="n">willShow</span> <span class="nv">viewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 親ビューに遷移する際、アルバム内容確定ボタン経由でなければCoreDataの編集内容を保存せずに破棄する</span>
+        <span class="k">if</span> <span class="n">viewController</span> <span class="k">is</span> <span class="kt">ViewController</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isSavingTheEditedAlbum</span> <span class="p">{</span>
+            <span class="kt">CoreDataModel</span><span class="o">.</span><span class="nf">rollback</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">isSavingTheEditedAlbum</code>でない場合、<code class="language-plaintext highlighter-rouge">CoreDataModel.rollback()</code>で変更を破棄する。<code class="language-plaintext highlighter-rouge">CoreDataModel.delete()</code>とか全部やったことが消えちゃう。</p>
+
+<h2 id="まとめ">まとめ？</h2>
+
+<p>以上、現時点の独学理解と実装内容をもとに現状をまとめた。下は<code class="language-plaintext highlighter-rouge">class CoreDataModel</code>のソースコードである。</p>
+
+<h2 id="class-coredatamodelとしてメソッドを作成してまとめているが">class CoreDataModelとしてメソッドを作成してまとめているが</h2>
+
+<p>きちゃないのできれいにするコツが知りたい。</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">CoreData</span>
+
+<span class="kd">class</span> <span class="kt">CoreDataModel</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">newTrack</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Track</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">appDelegate</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="k">as?</span> <span class="kt">AppDelegate</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// TODO: いちいちsaveContext()でもう一度guardを書かずに済まないか？ -</span>
+            <span class="nf">abort</span><span class="p">()</span> <span class="c1">// TODO: abort()でよい？ -</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="nv">managedContext</span> <span class="o">=</span> <span class="n">appDelegate</span><span class="o">.</span><span class="n">persistentContainer</span><span class="o">.</span><span class="n">viewContext</span>
+        <span class="k">let</span> <span class="nv">entity</span> <span class="o">=</span> <span class="kt">NSEntityDescription</span><span class="o">.</span><span class="nf">entity</span><span class="p">(</span><span class="nv">forEntityName</span><span class="p">:</span> <span class="s">"Track"</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="n">managedContext</span><span class="p">)</span><span class="o">!</span>
+        <span class="k">let</span> <span class="nv">track</span> <span class="o">=</span> <span class="kt">Track</span><span class="p">(</span><span class="nv">entity</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="nv">insertInto</span><span class="p">:</span> <span class="n">managedContext</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">track</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">fetchTracks</span><span class="p">(</span><span class="n">with</span> <span class="nv">predicate</span><span class="p">:</span> <span class="kt">NSPredicate</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Track</span><span class="p">]</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">appDelegate</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="k">as?</span> <span class="kt">AppDelegate</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">abort</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="nv">managedContext</span> <span class="o">=</span> <span class="n">appDelegate</span><span class="o">.</span><span class="n">persistentContainer</span><span class="o">.</span><span class="n">viewContext</span>
+        <span class="k">let</span> <span class="nv">fetchRequest</span> <span class="o">=</span> <span class="kt">NSFetchRequest</span><span class="o">&lt;</span><span class="kt">NSManagedObject</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">entityName</span><span class="p">:</span> <span class="s">"Track"</span><span class="p">)</span>
+        <span class="n">fetchRequest</span><span class="o">.</span><span class="n">predicate</span> <span class="o">=</span> <span class="n">predicate</span>
+        <span class="n">fetchRequest</span><span class="o">.</span><span class="n">sortDescriptors</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="kt">NSSortDescriptor</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"index"</span><span class="p">,</span> <span class="nv">ascending</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">tracks</span> <span class="o">=</span> <span class="k">try</span> <span class="n">managedContext</span><span class="o">.</span><span class="nf">fetch</span><span class="p">(</span><span class="n">fetchRequest</span><span class="p">)</span> <span class="k">as!</span> <span class="p">[</span><span class="kt">Track</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">tracks</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="k">as</span> <span class="kt">NSError</span> <span class="p">{</span>
+            <span class="nf">fatalError</span><span class="p">(</span><span class="s">"Could not fetch. </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">error</span><span class="o">.</span><span class="n">userInfo</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">save</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">appDelegate</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="k">as?</span> <span class="kt">AppDelegate</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">abort</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="n">appDelegate</span><span class="o">.</span><span class="nf">saveContext</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">rollback</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">appDelegate</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="k">as?</span> <span class="kt">AppDelegate</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">abort</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="nv">managedContext</span> <span class="o">=</span> <span class="n">appDelegate</span><span class="o">.</span><span class="n">persistentContainer</span><span class="o">.</span><span class="n">viewContext</span>
+        <span class="n">managedContext</span><span class="o">.</span><span class="nf">rollback</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">track</span><span class="p">:</span> <span class="kt">Track</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">appDelegate</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">delegate</span> <span class="k">as?</span> <span class="kt">AppDelegate</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">abort</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">let</span> <span class="nv">managedContext</span> <span class="o">=</span> <span class="n">appDelegate</span><span class="o">.</span><span class="n">persistentContainer</span><span class="o">.</span><span class="n">viewContext</span>
+        <span class="n">managedContext</span><span class="o">.</span><span class="nf">delete</span><span class="p">(</span><span class="n">track</span><span class="p">)</span> <span class="c1">// delete()を呼んだ後もsaveContext()されるまでは確定されない</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> タグ: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/tags/#coredata" class="page__taxonomy-item" rel="tag">CoreData</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#swift" class="page__taxonomy-item" rel="tag">Swift</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#tableview" class="page__taxonomy-item" rel="tag">TableView</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#xcode" class="page__taxonomy-item" rel="tag">Xcode</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> カテゴリー: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/categories/#programming" class="page__taxonomy-item" rel="tag">Programming</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/categories/#system" class="page__taxonomy-item" rel="tag">System</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新日時:</strong> <time datetime="2021-04-22T00:00:00+00:00">April 22, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">共有</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=mt_2shi&text=CoreData%E3%82%92TableView%E3%81%A7%E6%89%B1%E3%81%86%EF%BC%88%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E4%B8%A6%E3%81%B3%E6%9B%BF%E3%81%88%E3%80%81%E5%89%8A%E9%99%A4%E3%81%A8%E3%81%AE%E9%80%A3%E6%90%BA%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%EF%BC%89%EF%BC%88Xcode12.4%E3%80%81Swift+5.3.2%EF%BC%89%20https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210422%2Fswift-coredata_and_tableview%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210422%2Fswift-coredata_and_tableview%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210422%2Fswift-coredata_and_tableview%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/mtnishi/system/programming/20210421/swift-coredata/" class="pagination--pager" title="CoreData：データの更新について（Xcode12.4、Swift 5.3.2）
+">前へ</a>
+    
+    
+      <a href="/mtnishi/others/english/20210423/cnn10/" class="pagination--pager" title="CNN10ニュースでリスニングを強化……しようとしている
+">次へ</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">関連記事</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210602/weekly_ochiai/" rel="permalink">WEEKLY OCHIAI：枝野代表に「覚悟」を問う
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-02T00:00:00+00:00">June 2, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">まさかの1on1。落合vs枝野。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/entertainment/anime/20210530/anime-supercub/" rel="permalink">トネ・コーケン著ライトノベル原作「スーパーカブ」を6話まで視聴
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-30T00:00:00+00:00">May 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">スーパーカブを6話まで視聴した。ネトフリにない……！？Amazonにあった。よかったよかった。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210529/fishing-umikku/" rel="permalink">釣り@ウミック
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-29T00:00:00+00:00">May 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">福井県大飯郡高浜町音海のウミックにて、筏釣りに興じた。自分の釣果は50cmのエソ1匹笑
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/system/programming/20210528/swift-load-csv-to-coredata/" rel="permalink">【Swift】CSVを読み込んでCoreDataに保存（Xcode12.4、Swift 5.3.2）
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00+00:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          10 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">CoreDataを使って、音楽アプリのアルバムとトラックをそれぞれAlbum、Trackエンティティとして管理しているが、それらをCSVファイルで管理できるようにしたい。手始めに、手動でCSVファイルを作り、プログラムで読み込んでそれらをCoreDataに保存させた。やってみたらスマートではないかもしれないが簡単...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="検索キーワードを入力してください..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>フォロー</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab icon-qiita" aria-hidden="true"></i> Qiita</a></li>
+        
+      
+        
+          <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i> ブクログ</a></li>
+        
+      
+    
+
+    <li><a href="/mtnishi/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020-2022 悠 (Yu). Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/mtnishi/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/mtnishi/assets/js/lunr/lunr.min.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-store.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

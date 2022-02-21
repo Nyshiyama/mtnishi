@@ -1,0 +1,828 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="ja" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>XcodeでGitを使う際の注意点（不具合？） - Mt. Nishiブログ</title>
+<meta name="description" content="せっかくなのでXcode（Swift）でもGitを使ってバージョン管理したいが、地味に面倒なことが。">
+
+
+  <meta name="author" content="悠">
+  
+  <meta property="article:author" content="悠">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="Mt. Nishiブログ">
+<meta property="og:title" content="XcodeでGitを使う際の注意点（不具合？）">
+<meta property="og:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210128/blog20210128/">
+
+
+  <meta property="og:description" content="せっかくなのでXcode（Swift）でもGitを使ってバージョン管理したいが、地味に面倒なことが。">
+
+
+
+  <meta property="og:image" content="https://nyshiyama.github.io/mtnishi/assets/images/xcodeimage-freephoto.jpg">
+
+
+
+  <meta name="twitter:site" content="@mt_2shi">
+  <meta name="twitter:title" content="XcodeでGitを使う際の注意点（不具合？）">
+  <meta name="twitter:description" content="せっかくなのでXcode（Swift）でもGitを使ってバージョン管理したいが、地味に面倒なことが。">
+  <meta name="twitter:url" content="https://nyshiyama.github.io/mtnishi/system/programming/20210128/blog20210128/">
+
+  
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://nyshiyama.github.io/mtnishi/assets/images/xcodeimage-freephoto.jpg">
+  
+
+  
+
+
+
+  <meta property="article:published_time" content="2021-01-28T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://nyshiyama.github.io/mtnishi/system/programming/20210128/blog20210128/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "悠 (Yu)",
+      "url": "https://nyshiyama.github.io/mtnishi/",
+      "sameAs": ["https://twitter.com/mt_2shi","https://github.com/Nyshiyama","https://qiita.com/mt_west"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/mtnishi/feed.xml" type="application/atom+xml" rel="alternate" title="Mt. Nishiブログ Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/mtnishi/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="shortcut icon" type="image/png" href=/mtnishi/assets/images/logo.png>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/mtnishi/"><img src="/mtnishi/assets/images/logo.png" alt=""></a>
+        
+        <a class="site-title" href="/mtnishi/">
+          Mt. Nishiブログ
+          <span class="site-subtitle">v2.0</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/mtnishi/about/" title="当ブログ、私について">ABOUT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/categories/" title="カテゴリーごとにソートされた記事一覧">CATEGORIES</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/tags/" title="タグごとにソートされた記事一覧">TAGS</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/portfolio/" title="作品集">PORTFOLIO</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/contact/" title="お問い合わせ">CONTACT</a>
+            </li><li class="masthead__menu-item">
+              <a href="/mtnishi/policy/" title="サイトポリシー">POLICY</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">メニュー</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/mtnishi/assets/images/xcodeimage-freephoto.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          XcodeでGitを使う際の注意点（不具合？）
+
+        
+      </h1>
+      
+        <p class="page__lead">せっかくなのでXcode（Swift）でもGitを使ってバージョン管理したいが、地味に面倒なことが。
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-01-28T00:00:00+00:00">January 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="https://Nyshiyama.github.io/mtnishi/" itemprop="item"><span itemprop="name">ホーム</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#system" itemprop="item"><span itemprop="name">System</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#programming" itemprop="item"><span itemprop="name">Programming</span></a>
+          <meta itemprop="position" content="3" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/mtnishi/categories/#20210128" itemprop="item"><span itemprop="name">20210128</span></a>
+          <meta itemprop="position" content="4" />
+        </li>
+        <span class="sep">/</span>
+      
+    
+      
+      
+        <li class="current">XcodeでGitを使う際の注意点（不具合？）</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/mtnishi/assets/images/paint_by_petalica2.jpg" alt="悠" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">悠</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>興味ドリブンな人生を送っている自堕落人間</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">フォロー</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">大阪</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+            <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab fa-fw icon-qiita" aria-hidden="true"></i><span class="label">Qiita</span></a></li>
+          
+        
+          
+            <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i><span class="label">ブクログ</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="XcodeでGitを使う際の注意点（不具合？）">
+    <meta itemprop="description" content="せっかくなのでXcode（Swift）でもGitを使ってバージョン管理したいが、地味に面倒なことが。">
+    <meta itemprop="datePublished" content="2021-01-28T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Gitのユーザーネームとメールアドレスを登録して、プロジェクト作成でGitなんたらにチェックを入れると勝手にリポジトリが作成される。そこまでは大して問題なかった。</p>
+
+<p>最初のコミットとして、プロジェクトの中身をひとまずすべて選択してコミットした（gitignoreファイルを作成しなかった）。その後で試しにコメントを入れてみたが、左のファイル一覧に「Modified」を表す「M」が表示されない。</p>
+
+<p><img src="/mtnishi/assets/images/Xcodenommark.jpg" alt="alt" /></p>
+
+<p>エディター画面では左端に青色のバーが表示されていて、変更を破棄したり変更前後の比較は行えるのだが、「M」がないせいかCommitできない。ファイル名部分を右クリックして「Source Control」でも選択肢は有効になっていないし、上のタブメニュー「Source Control」でも変更を検出しておらずCommitするファイルを選択できない。</p>
+
+<p>適当にネットを調べてみた限り、「M」が表示されない事例は見つからなかった。Xcodeを再起動してみると「M」が表示されたが、編集を元にもどしてみても今度は「M」が消えない。一応ファイル変更が検出されているのでそのファイルだけはコミットできるが、新しく別ファイルを編集した場合はやはりどうしようもない。</p>
+
+<p>今の所唯一の手立ては、上のタブメニュー「Source Control」で「Refresh File Status」を選択すると、「M」の表示が更新される。</p>
+
+<p><img src="/mtnishi/assets/images/XcodeRefreshFileStatus.jpg" alt="alt" /></p>
+
+<p>Xcode12からの仕様か、不具合かもしくは自分のPC限定でバグっているか、PCの気分が悪いのか……Commitする前にいちいち「Refresh File Status」しないといけないのが地味に面倒だがとりあえず仕方ない。</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> タグ: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/tags/#git" class="page__taxonomy-item" rel="tag">Git</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#macbook" class="page__taxonomy-item" rel="tag">MacBook</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#swift" class="page__taxonomy-item" rel="tag">Swift</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/tags/#xcode" class="page__taxonomy-item" rel="tag">Xcode</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> カテゴリー: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/mtnishi/categories/#programming" class="page__taxonomy-item" rel="tag">Programming</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/mtnishi/categories/#system" class="page__taxonomy-item" rel="tag">System</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新日時:</strong> <time datetime="2021-01-28T00:00:00+00:00">January 28, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">共有</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?via=mt_2shi&text=Xcode%E3%81%A7Git%E3%82%92%E4%BD%BF%E3%81%86%E9%9A%9B%E3%81%AE%E6%B3%A8%E6%84%8F%E7%82%B9%EF%BC%88%E4%B8%8D%E5%85%B7%E5%90%88%EF%BC%9F%EF%BC%89%20https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210128%2Fblog20210128%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210128%2Fblog20210128%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fnyshiyama.github.io%2Fmtnishi%2Fsystem%2Fprogramming%2F20210128%2Fblog20210128%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="共有 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/mtnishi/others/diary/20210127/blog20210127/" class="pagination--pager" title="WEEKLY OCHIAI内容まとめ
+">前へ</a>
+    
+    
+      <a href="/mtnishi/system/programming/20210129/blog20210129/" class="pagination--pager" title="Swiftの勉強
+">次へ</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">関連記事</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210602/weekly_ochiai/" rel="permalink">WEEKLY OCHIAI：枝野代表に「覚悟」を問う
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-06-02T00:00:00+00:00">June 2, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          4 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">まさかの1on1。落合vs枝野。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/entertainment/anime/20210530/anime-supercub/" rel="permalink">トネ・コーケン著ライトノベル原作「スーパーカブ」を6話まで視聴
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-30T00:00:00+00:00">May 30, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">スーパーカブを6話まで視聴した。ネトフリにない……！？Amazonにあった。よかったよかった。
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/others/diary/20210529/fishing-umikku/" rel="permalink">釣り@ウミック
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-29T00:00:00+00:00">May 29, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">福井県大飯郡高浜町音海のウミックにて、筏釣りに興じた。自分の釣果は50cmのエソ1匹笑
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/mtnishi/system/programming/20210528/swift-load-csv-to-coredata/" rel="permalink">【Swift】CSVを読み込んでCoreDataに保存（Xcode12.4、Swift 5.3.2）
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-05-28T00:00:00+00:00">May 28, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          10 minutes read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">CoreDataを使って、音楽アプリのアルバムとトラックをそれぞれAlbum、Trackエンティティとして管理しているが、それらをCSVファイルで管理できるようにしたい。手始めに、手動でCSVファイルを作り、プログラムで読み込んでそれらをCoreDataに保存させた。やってみたらスマートではないかもしれないが簡単...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="検索キーワードを入力してください..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>フォロー</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/mt_2shi" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/Nyshiyama" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          <li><a href="https://qiita.com/mt_west" rel="nofollow noopener noreferrer"><i class="fab icon-qiita" aria-hidden="true"></i> Qiita</a></li>
+        
+      
+        
+          <li><a href="https://booklog.jp/users/mononokeouzi" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-book-open" aria-hidden="true"></i> ブクログ</a></li>
+        
+      
+    
+
+    <li><a href="/mtnishi/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020-2022 悠 (Yu). Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/mtnishi/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/mtnishi/assets/js/lunr/lunr.min.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-store.js"></script>
+<script src="/mtnishi/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
